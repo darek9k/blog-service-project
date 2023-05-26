@@ -24,6 +24,17 @@ public class InvoiceController {
         Optional<Invoice> invoiceOptional = invoiceRepository.findById(1L);
         Invoice invoice = invoiceOptional.get();
         System.out.println(invoice);
+
+        invoiceRepository.delete(invoice);
+
+        invoiceRepository.deleteById(2L);
+
+        invoiceRepository.findAll().forEach(System.out::println);
+
+        Optional<Invoice> optionalInvoice = invoiceRepository.findById(10L);
+        Invoice invoice10 = optionalInvoice.get();
+        invoice10.setBuyer("Arek");
+        invoiceRepository.save(invoice10);
     }
     @PostMapping
     public void create(){
