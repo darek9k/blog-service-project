@@ -47,6 +47,17 @@ public class PostController {
 
         post4.setAuthor("changed Darek");
         postRepository.save(post4);
+
+        Post post6 = new Post();
+        post6.setId(6L);
+        post6.setAuthor("Changed Darek6");
+        postRepository.save(post6);
+
+        Optional<Post> optionalPost3 = postRepository.findById(3L);
+        Post post3 = optionalPost3.get();
+        post3.setAuthor("Changed Darek3");
+        post3.setScope(null);
+        postRepository.save(post3);
     }
 
     @PostMapping
