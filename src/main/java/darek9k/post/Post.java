@@ -1,9 +1,6 @@
 package darek9k.post;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -15,13 +12,13 @@ public class Post {
     private String text;
 
     private LocalDateTime createdDate;
-
+    @Enumerated(EnumType.STRING)
     private PostScope scope;
 
     private String author;
 
     private LocalDateTime publicationDate;
-
+    @Enumerated(EnumType.STRING)
     private PostStatus status;
 
 }
