@@ -41,7 +41,12 @@ public class PostController {
         System.out.println("-----------findAll-------------");
         postRepository.findAllById(List.of(8L, 2L, 3L)).forEach(System.out::println);
 
+        //-------------------- UPDATE -----------------------
+        Optional<Post> optionalPost4 = postRepository.findById(4L);
+        Post post4 = optionalPost4.get();
 
+        post4.setAuthor("changed Darek");
+        postRepository.save(post4);
     }
 
     @PostMapping

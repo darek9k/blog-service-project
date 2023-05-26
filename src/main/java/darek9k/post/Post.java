@@ -33,6 +33,34 @@ public class Post {
         this.status = status;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public void setScope(PostScope scope) {
+        this.scope = scope;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setPublicationDate(LocalDateTime publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Post{" +
