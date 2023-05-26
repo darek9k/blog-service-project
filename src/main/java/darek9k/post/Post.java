@@ -21,4 +21,28 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
+    public Post(){}
+
+    public Post(Long id, String text, LocalDateTime createdDate, PostScope scope, String author, LocalDateTime publicationDate, PostStatus status) {
+        this.id = id;
+        this.text = text;
+        this.createdDate = createdDate;
+        this.scope = scope;
+        this.author = author;
+        this.publicationDate = publicationDate;
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", createdDate=" + createdDate +
+                ", scope=" + scope +
+                ", author='" + author + '\'' +
+                ", publicationDate=" + publicationDate +
+                ", status=" + status +
+                '}';
+    }
 }
