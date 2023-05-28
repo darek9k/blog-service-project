@@ -1,5 +1,7 @@
 package darek9k.post;
 
+import darek9k.post.PostScope;
+
 import java.time.LocalDateTime;
 
 public class CreatePostRequest {
