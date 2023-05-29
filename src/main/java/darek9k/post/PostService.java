@@ -23,7 +23,7 @@ public class PostService {
     public ReadPostResponse findById(Long id) {
         return postRepository.findById(id)//gives optional Post
                 .map(ReadPostResponse::from)//mapping Optional<Post> to Optional<ReadPostResponse>
-                .orElseThrow(EntityNotFoundException::new);//either give ReadPostResponse or throw an exception.
+                .orElseThrow(() -> new EntityNotFoundException());//either give ReadPostResponse or throw an exception.
     }
 
 }

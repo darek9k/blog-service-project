@@ -1,5 +1,6 @@
 package darek9k.invoice;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,5 +19,10 @@ public class InvoiceService {
                 createInvoiceRequest.seller()
         );
         invoiceRepository.save(invoice);
+    }
+    public ReadInvoiceResponse findById(Long id){
+        return invoiceRepository.findById(id).
+                map(ReadInvoiceResponse::from).
+                orElseThrow(EntityNotFoundException::new);
     }
 }
