@@ -14,8 +14,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ReadPostResponse> read(@PathVariable("id") Long id) {
-        ReadPostResponse readPostResponse = postService.findById(id);
-        return ResponseEntity.ok(readPostResponse);
+        return ResponseEntity.ok(postService.findById(id));
     }
 
     @PostMapping
