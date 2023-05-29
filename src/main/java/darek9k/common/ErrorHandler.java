@@ -10,6 +10,8 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -33,5 +35,10 @@ public class ErrorHandler {
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex){
         return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<String> handleNoSuchElementException(NoSuchElementException ex){
+        return ResponseEntity.notFound().build();
     }
 }
