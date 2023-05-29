@@ -64,6 +64,30 @@ public class Invoice {
         this.status = status;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public LocalDate getPaymentDate() {
+        return paymentDate;
+    }
+
+    public String getBuyer() {
+        return buyer;
+    }
+
+    public String getSeller() {
+        return seller;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
+    }
+
     @Override
     public String toString() {
         return "Invoice{" +
@@ -78,4 +102,5 @@ public class Invoice {
 
     public static class CreateInvoiceRequest {
     }
+
 }
