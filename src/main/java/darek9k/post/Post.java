@@ -1,6 +1,10 @@
 package darek9k.post;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
 
@@ -9,15 +13,27 @@ public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotBlank
+    @NotNull
+    @Size(max = 5000)
     private String text;
+    @NotNull
     private LocalDateTime createdDate;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PostScope scope;
+    @NotBlank
+    @NotNull
+    @Size(max = 100)
     private String author;
+    @FutureOrPresent
     private LocalDateTime publicationDate;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private PostStatus status;
-    public Post(){}
+
+    public Post() {
+    }
 
     public Post(String text, PostScope scope, String author, LocalDateTime publicationDate) {
         this.text = text;

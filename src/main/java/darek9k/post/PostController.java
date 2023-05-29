@@ -1,5 +1,6 @@
 package darek9k.post;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,7 +18,7 @@ public class PostController {
     }
 
     @PostMapping
-    public void create(@RequestBody CreatePostRequest postRequest) {
+    public void create(@Valid @RequestBody CreatePostRequest postRequest) {
         postService.create(postRequest);
     }
 
