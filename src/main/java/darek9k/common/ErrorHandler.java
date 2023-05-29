@@ -1,6 +1,7 @@
 package darek9k.common;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -22,5 +23,11 @@ public class ErrorHandler {
             }
         }
         return ResponseEntity.badRequest().body(fieldsErrorMap);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<String> handleHttpMessageNotReadableException(){
+        String response = "Invalid JSON";
+        return ResponseEntity.badRequest().body(response);
     }
 }
