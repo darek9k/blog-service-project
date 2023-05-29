@@ -1,5 +1,6 @@
 package darek9k.invoice;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class InvoiceController {
     }
 
     @PostMapping
-    public void create(@RequestBody CreateInvoiceRequest createInvoiceRequest) {
+    public void create(@Valid @RequestBody CreateInvoiceRequest createInvoiceRequest) {
         invoiceService.create(createInvoiceRequest);
     }
 

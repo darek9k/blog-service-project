@@ -1,6 +1,10 @@
 package darek9k.invoice;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -9,21 +13,26 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotNull
     private LocalDateTime createdDate;
-
+    @NotNull
     private LocalDate paymentDate;
-
+    @NotBlank
+    @NotNull
+    @Size(max = 100)
     private String buyer;
-
+    @NotBlank
+    @NotNull
+    @Size(max = 100)
     private String seller;
+    @NotNull
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
     public Invoice() {
     }
 
-    public Invoice (LocalDate paymentDate, String buyer, String seller) {
+    public Invoice(LocalDate paymentDate, String buyer, String seller) {
         this.createdDate = LocalDateTime.now();
         this.paymentDate = paymentDate;
         this.buyer = buyer;
