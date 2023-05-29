@@ -10,17 +10,13 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String text;
-
     private LocalDateTime createdDate;
     @Enumerated(EnumType.STRING)
     private PostScope scope;
-
     private String author;
-
     private LocalDateTime publicationDate;
     @Enumerated(EnumType.STRING)
     private PostStatus status;
-
     public Post(){}
 
     public Post(String text, PostScope scope, String author, LocalDateTime publicationDate) {
