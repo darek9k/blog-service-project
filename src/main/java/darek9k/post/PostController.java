@@ -21,8 +21,9 @@ public class PostController {
         this.postService = postService;
     }
 
-    @GetMapping
-    public void read() {
+    @GetMapping("/{id}")
+    public void read(@PathVariable("id") Long id) {
+        System.out.println(id);
     }
 
     @PostMapping
