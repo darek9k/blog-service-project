@@ -25,8 +25,8 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<String> handleHttpMessageNotReadableException(){
-        String response = "Invalid JSON";
-        return ResponseEntity.badRequest().body(response);
+    public ResponseEntity<ErrorResponse > handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+        System.out.println(ex.getMessage());
+        return ResponseEntity.badRequest().body(new ErrorResponse("Invalid JSON"));
     }
 }
