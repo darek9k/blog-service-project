@@ -30,16 +30,4 @@ public class PostController {
         postService.create(postRequest);
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> handleValidationEx(MethodArgumentNotValidException ex){
-        ex.getBindingResult().getFieldErrors().forEach(fieldError -> System.out.println(fieldError.getField() + ":" + fieldError.getDefaultMessage()));
-
-        Map<String, String> fieldsErrorMap = new HashMap<>();
-        for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
-            if (fieldsErrorMap.put(fieldError.getField(), fieldError.getDefaultMessage()) != null) {
-                throw new IllegalStateException("Duplicate key");
-            }
-        }
-return ResponseEntity.badRequest().body(fieldsErrorMap);
-    }
 }
