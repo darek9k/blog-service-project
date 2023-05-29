@@ -72,3 +72,31 @@ public void create(CreatePostRequest postRequest){
 
 As a separate homework assignment, I am simultaneously performing similar operations with the Invoice entity. The goal is to generate an invoice report.
 
+In the next steps, we add validation.
+
+Checking the correct data at request entry and before saving to the database.
+
+Create an error result that is displayed to the user.
+
+In the form of JSON.
+
+>@Valid
+
+added before the @RequestBody parameter in the method in the controller class.
+
+Description of fields with annotations:
+
+>@NotNull
+
+>@NotBlank
+
+>@Size (max = ***)
+
+Adding the @ControllerAdvice annotation in a class that implements annotated methods as a component:
+
+>@ExceptionHandler
+
+>@InitBinder
+
+>@ModelAttribute
+
