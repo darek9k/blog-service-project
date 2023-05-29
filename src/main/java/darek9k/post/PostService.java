@@ -1,5 +1,6 @@
 package darek9k.post;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,4 +19,11 @@ public class PostService {
         );
         postRepository.save(post);
     }
+
+    public ReadPostResponse findById(Long id) {
+        return postRepository.findById(id)//gives optional Post
+                .map(ReadPostResponse::from)//mapping Optional<Post> to Optional<ReadPostResponse>
+                .orElseThrow(EntityNotFoundException::new);//either give ReadPostResponse or throw an exception.
+    }
+
 }

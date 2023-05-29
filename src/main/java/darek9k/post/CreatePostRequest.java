@@ -2,7 +2,7 @@ package darek9k.post;
 
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Null;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ public class CreatePostRequest {
     @NotBlank
     @Size(max = 5000)
     private final String text;
-    @Null
+    @NotNull
     private final PostScope scope;
     @NotBlank
     @Size(max = 100)

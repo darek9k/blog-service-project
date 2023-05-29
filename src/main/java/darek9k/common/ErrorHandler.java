@@ -1,14 +1,18 @@
 package darek9k.common;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -25,8 +29,19 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorResponse > handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+    public ResponseEntity<String> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
         System.out.println(ex.getMessage());
-        return ResponseEntity.badRequest().body(new ErrorResponse("Invalid JSON"));
+        return ResponseEntity.badRequest().body("Invalid JSON");
     }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity.badRequest().build();
+    }
+
+    @ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class})
+    public ResponseEntity<String> handleNotFoundExceptions(RuntimeException ex) {
+        return ResponseEntity.notFound().build();
+    }
+
 }
