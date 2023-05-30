@@ -1,6 +1,7 @@
 package darek9k.post;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,6 +33,7 @@ public class PostService {
 
         post.setText(updatePostRequest.getText());
         post.setScope(updatePostRequest.getScope());
+        post.setVersion(updatePostRequest.getVersion());
 
         postRepository.save(post);
     }
