@@ -8,7 +8,6 @@ public class UpdatePostRequest {
 
     @NotNull
     private final Integer version;
-
     @NotBlank
     @Size(max = 5000)
     private final String text;
