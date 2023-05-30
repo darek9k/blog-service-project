@@ -31,10 +31,18 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        post.setText(updatePostRequest.getText());
-        post.setScope(updatePostRequest.getScope());
-        post.setVersion(updatePostRequest.getVersion());
+        Post newPost = new Post();
 
-        postRepository.save(post);
+        newPost.setId(post.getId());
+        newPost.setAuthor(post.getAuthor());
+        newPost.setCreatedDate(post.getCreatedDate());
+        newPost.setStatus(post.getStatus());
+        newPost.setPublicationDate(post.getPublicationDate());
+
+        newPost.setText(updatePostRequest.getText());
+        newPost.setScope(updatePostRequest.getScope());
+        newPost.setVersion(updatePostRequest.getVersion());
+
+        postRepository.save(newPost);
     }
 }
