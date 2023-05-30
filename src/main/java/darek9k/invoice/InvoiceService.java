@@ -25,4 +25,15 @@ public class InvoiceService {
                 map(ReadInvoiceResponse::from).
                 orElseThrow(EntityNotFoundException::new);
     }
+
+    public void update(Long id, UpdateInvoiceRequest updateInvoiceRequest) {
+        Invoice invoice = invoiceRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        invoice.setPaymentDate(updateInvoiceRequest.paymentDate());
+        invoice.setBuyer(updateInvoiceRequest.buyer());
+        invoice.setSeller(updateInvoiceRequest.seller());
+
+        invoiceRepository.save(invoice);
+    }
 }
