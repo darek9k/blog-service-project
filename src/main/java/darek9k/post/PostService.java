@@ -31,13 +31,7 @@ public class PostService {
         Post post = postRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        Post newPost = new Post();
-
-        newPost.setId(post.getId());
-        newPost.setAuthor(post.getAuthor());
-        newPost.setCreatedDate(post.getCreatedDate());
-        newPost.setStatus(post.getStatus());
-        newPost.setPublicationDate(post.getPublicationDate());
+        Post newPost = new Post(post);
 
         newPost.setText(updatePostRequest.getText());
         newPost.setScope(updatePostRequest.getScope());

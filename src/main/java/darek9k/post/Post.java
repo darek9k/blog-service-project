@@ -38,6 +38,17 @@ public class Post {
     public Post() {
     }
 
+    public Post(Post old) {
+        this.id = old.id;
+        this.version = old.version;
+        this.text = old.text;
+        this.createdDate = old.createdDate;
+        this.scope = old.scope;
+        this.author = old.author;
+        this.publicationDate = old.publicationDate;
+        this.status = old.status;
+    }
+
     public Post(String text, PostScope scope, String author, LocalDateTime publicationDate) {
         this.text = text;
         this.createdDate = LocalDateTime.now();
