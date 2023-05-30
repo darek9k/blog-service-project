@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 public class ReadPostResponse {
 
     private final Long id;
+    private final Integer version;
 
     private final String text;
 
@@ -17,8 +18,10 @@ public class ReadPostResponse {
     private final LocalDateTime publicationDate;
     private final PostStatus status;
 
-    public ReadPostResponse(Long id, String text, LocalDateTime createdDate, PostScope scope, String author, LocalDateTime publicationDate, PostStatus status) {
+
+    public ReadPostResponse(Long id, Integer version, String text, LocalDateTime createdDate, PostScope scope, String author, LocalDateTime publicationDate, PostStatus status) {
         this.id = id;
+        this.version = version;
         this.text = text;
         this.createdDate = createdDate;
         this.scope = scope;
@@ -29,6 +32,10 @@ public class ReadPostResponse {
 
     public Long getId() {
         return id;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 
     public String getText() {
@@ -58,6 +65,7 @@ public class ReadPostResponse {
     public static ReadPostResponse from(Post post){
         return new ReadPostResponse(
                 post.getId(),
+                post.getVersion(),
                 post.getText(),
                 post.getCreatedDate(),
                 post.getScope(),

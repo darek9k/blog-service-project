@@ -6,6 +6,6 @@ import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
-public record UpdateInvoiceRequest(@NotNull LocalDate paymentDate, @NotNull @NotBlank @Size(max = 100) String buyer, String seller) {
+public record UpdateInvoiceRequest(@NotNull Integer version, @NotNull LocalDate paymentDate, @NotNull @NotBlank @Size(max = 100) String buyer, String seller) {
 
 }

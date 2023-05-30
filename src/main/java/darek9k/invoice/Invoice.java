@@ -13,6 +13,9 @@ public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Version
+    @NotNull
+    private Integer version;
     @NotNull
     private LocalDateTime createdDate;
     @NotNull
@@ -32,6 +35,16 @@ public class Invoice {
     public Invoice() {
     }
 
+    public Invoice(Invoice old) {
+        this.id = old.id;
+        this.version = old.version;
+        this.createdDate = old.createdDate;
+        this.paymentDate = old.paymentDate;
+        this.buyer = old.buyer;
+        this.seller = old.seller;
+        this.status = old.status;
+    }
+
     public Invoice(LocalDate paymentDate, String buyer, String seller) {
         this.createdDate = LocalDateTime.now();
         this.paymentDate = paymentDate;
@@ -42,6 +55,10 @@ public class Invoice {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public void setCreatedDate(LocalDateTime createdDate) {
@@ -66,6 +83,10 @@ public class Invoice {
 
     public Long getId() {
         return id;
+    }
+
+    public Integer getVersion() {
+        return version;
     }
 
     public LocalDateTime getCreatedDate() {
