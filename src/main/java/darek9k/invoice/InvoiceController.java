@@ -24,4 +24,10 @@ public class InvoiceController {
         invoiceService.create(createInvoiceRequest);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody UpdateInvoiceRequest updateInvoiceRequest) {
+        invoiceService.update(id, updateInvoiceRequest);
+        return ResponseEntity.ok().build();
+    }
+
 }
