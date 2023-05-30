@@ -21,4 +21,10 @@ public class PostController {
     public void create(@Valid @RequestBody CreatePostRequest postRequest) {
         postService.create(postRequest);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") Long id, @Valid @RequestBody UpdatePostRequest updatePostRequest) {
+        postService.update(id, updatePostRequest);
+        return ResponseEntity.ok().build();
+    }
 }
