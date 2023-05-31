@@ -30,4 +30,9 @@ public class InvoiceController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ReadInvoiceResponse> delete(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(invoiceService.findById(id));
+    }
+
 }
