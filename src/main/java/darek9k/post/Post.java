@@ -5,10 +5,14 @@ import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,6 +20,13 @@ public class Post {
     @Version
     @NotNull
     private Integer version;
+    @CreatedDate
+    @NotNull
+    private LocalDateTime createdDateTime;
+
+    @LastModifiedDate
+    @NotNull
+    private LocalDateTime lastModifiedDate;
     @NotBlank
     @NotNull
     @Size(max = 5000)
@@ -41,6 +52,8 @@ public class Post {
     public Post(Post old) {
         this.id = old.id;
         this.version = old.version;
+        this.createdDateTime = old.createdDateTime;
+        this.lastModifiedDate = old.lastModifiedDate;
         this.text = old.text;
         this.createdDate = old.createdDate;
         this.scope = old.scope;
