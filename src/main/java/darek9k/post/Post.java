@@ -32,8 +32,6 @@ public class Post {
     @Size(max = 5000)
     private String text;
     @NotNull
-    private LocalDateTime createdDate;
-    @NotNull
     @Enumerated(EnumType.STRING)
     private PostScope scope;
     @NotBlank
@@ -55,7 +53,6 @@ public class Post {
         this.createdDateTime = old.createdDateTime;
         this.lastModifiedDate = old.lastModifiedDate;
         this.text = old.text;
-        this.createdDate = old.createdDate;
         this.scope = old.scope;
         this.author = old.author;
         this.publicationDate = old.publicationDate;
@@ -64,83 +61,92 @@ public class Post {
 
     public Post(String text, PostScope scope, String author, LocalDateTime publicationDate) {
         this.text = text;
-        this.createdDate = LocalDateTime.now();
         this.scope = scope;
         this.author = author;
         this.publicationDate = publicationDate;
         this.status = PostStatus.ACTIVE;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setScope(PostScope scope) {
-        this.scope = scope;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
-    }
-
-    public void setPublicationDate(LocalDateTime publicationDate) {
-        this.publicationDate = publicationDate;
-    }
-
-    public void setStatus(PostStatus status) {
-        this.status = status;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getVersion() {
         return version;
     }
 
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
     public String getText() {
         return text;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public PostScope getScope() {
         return scope;
     }
 
+    public void setScope(PostScope scope) {
+        this.scope = scope;
+    }
+
     public String getAuthor() {
         return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public LocalDateTime getPublicationDate() {
         return publicationDate;
     }
 
+    public void setPublicationDate(LocalDateTime publicationDate) {
+        this.publicationDate = publicationDate;
+    }
+
     public PostStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(PostStatus status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Post{" +
                 "id=" + id +
+                ", version=" + version +
+                ", createdDateTime=" + createdDateTime +
+                ", lastModifiedDate=" + lastModifiedDate +
                 ", text='" + text + '\'' +
-                ", createdDate=" + createdDate +
                 ", scope=" + scope +
                 ", author='" + author + '\'' +
                 ", publicationDate=" + publicationDate +
