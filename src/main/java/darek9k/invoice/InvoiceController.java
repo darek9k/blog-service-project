@@ -36,5 +36,10 @@ public class InvoiceController {
         return ResponseEntity.noContent().build();
     }
 
+    @PutMapping("/{id}/archive")
+    public ResponseEntity<Void> archive(@PathVariable("id") Long id) {
+        invoiceService.archive(id);
+        return ResponseEntity.ok().build();
+    }
 
 }
