@@ -4,11 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Invoice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,8 +20,13 @@ public class Invoice {
     @Version
     @NotNull
     private Integer version;
+    @CreatedDate
     @NotNull
-    private LocalDateTime createdDate;
+    private LocalDateTime createdDateTime;
+
+    @LastModifiedDate
+    @NotNull
+    private LocalDateTime lastModifiedDate;
     @NotNull
     private LocalDate paymentDate;
     @NotBlank
@@ -32,13 +41,15 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
-    public Invoice() {
+    public Invoice(){
+
     }
 
-    public Invoice(Invoice old) {
+   public Invoice(Invoice old) {
         this.id = old.id;
         this.version = old.version;
-        this.createdDate = old.createdDate;
+        this.createdDateTime = old.createdDateTime;
+        this.lastModifiedDate = old.lastModifiedDate;
         this.paymentDate = old.paymentDate;
         this.buyer = old.buyer;
         this.seller = old.seller;
@@ -46,74 +57,83 @@ public class Invoice {
     }
 
     public Invoice(LocalDate paymentDate, String buyer, String seller) {
-        this.createdDate = LocalDateTime.now();
         this.paymentDate = paymentDate;
         this.buyer = buyer;
         this.seller = seller;
         this.status = InvoiceStatus.ACTIVE;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public void setPaymentDate(LocalDate paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public void setBuyer(String buyer) {
-        this.buyer = buyer;
-    }
-
-    public void setSeller(String seller) {
-        this.seller = seller;
-    }
-
-    public void setStatus(InvoiceStatus status) {
-        this.status = status;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Integer getVersion() {
         return version;
     }
 
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public LocalDateTime getCreatedDateTime() {
+        return createdDateTime;
+    }
+
+    public void setCreatedDateTime(LocalDateTime createdDateTime) {
+        this.createdDateTime = createdDateTime;
+    }
+
+    public LocalDateTime getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(LocalDateTime lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     public LocalDate getPaymentDate() {
         return paymentDate;
     }
 
+    public void setPaymentDate(LocalDate paymentDate) {
+        this.paymentDate = paymentDate;
+    }
+
     public String getBuyer() {
         return buyer;
+    }
+
+    public void setBuyer(String buyer) {
+        this.buyer = buyer;
     }
 
     public String getSeller() {
         return seller;
     }
 
+    public void setSeller(String seller) {
+        this.seller = seller;
+    }
+
     public InvoiceStatus getStatus() {
         return status;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "Invoice{" +
                 "id=" + id +
-                ", createdDate=" + createdDate +
+                ", version=" + version +
+                ", createdDateTime=" + createdDateTime +
+                ", lastModifiedDate=" + lastModifiedDate +
                 ", paymentDate=" + paymentDate +
                 ", buyer='" + buyer + '\'' +
                 ", seller='" + seller + '\'' +
