@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 public class InvoiceService {
@@ -59,24 +60,34 @@ public class InvoiceService {
     }
 
     public void find() {
-        log(invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
-                LocalDate.of(2023, 6,19),
-                LocalDate.of(2023,6,25),
-                "se",
-                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)),
+        log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
+                        LocalDate.of(2023, 6, 19),
+                        LocalDate.of(2023, 6, 25),
+                        "se",
+                        Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)
+                ),
                 "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
         );
 
-        log(invoiceRepository.findByPaymentDateLessThanEqual(
-                LocalDate.of(2023,6,25),
-                Sort.by("buyer")),
-                "findByPaymentDateLessThanEqual");
+        log(() -> invoiceRepository.findByPaymentDateLessThanEqual(
+                        LocalDate.of(2023, 6, 25),
+                        Sort.by(Sort.Order.desc("PaymentDate"),
+                                Sort.Order.asc("id")
+                        )
+                ),
+                "findByPaymentDateLessThanEqual"
+        );
 
-        log(invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(LocalDate.of(2023,06,25)),"findByPaymentDateLessThanEqualOrderByPaymentDateDesc");
+        log(() -> invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(
+                        LocalDate.of(2023, 6, 25)
+                ),
+                "findByPaymentDateLessThanEqualOrderByPaymentDateDesc"
+        );
 
     }
-    private void log(List<Invoice> invoices, String methodName){
-        System.out.println("--------------------"+methodName+"----------------------");
-        invoices.forEach(System.out::println);
+
+    private void log(Supplier<List<Invoice>> listSupplier, String methodName) {
+        System.out.println("--------------------" + methodName + "----------------------");
+        listSupplier.get().forEach(System.out::println);
     }
 }
