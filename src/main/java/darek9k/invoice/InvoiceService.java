@@ -1,7 +1,5 @@
 package darek9k.invoice;
 
-import darek9k.post.Post;
-import darek9k.post.PostStatus;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
