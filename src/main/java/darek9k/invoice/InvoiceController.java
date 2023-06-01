@@ -42,4 +42,10 @@ public class InvoiceController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping
+    public ResponseEntity<Void> find() {
+        invoiceService.find();
+        return ResponseEntity.noContent().build();
+    }
+
 }
