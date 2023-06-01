@@ -1,11 +1,10 @@
 package darek9k.post;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PostService {
@@ -57,13 +56,27 @@ public class PostService {
     }
 
     public void find() {
-        /*log(postRepository.findByStatus(PostStatus.ACTIVE), "findByStatus");
+        log(postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.ACTIVE), "findByStatusOrderByCreatedDateTimeDesc");
 
-        System.out.println(postRepository.countByStatus(PostStatus.DELETED));
+        log(postRepository.findByStatus(PostStatus.ACTIVE,
+                        Sort.by("CreatedDateTime")
+                ), "findByStatus"
+        );
+
+        log(postRepository.findByStatus(PostStatus.ACTIVE,
+                        Sort.by("CreatedDateTime", "author")
+                ), "findByStatus"
+        );
+
+        log(postRepository.findByStatus(PostStatus.ACTIVE,
+                        Sort.by(Sort.Order.asc("CreatedDateTime"), Sort.Order.desc("author"))
+                ), "findByStatus"
+        );
+        /*System.out.println(postRepository.countByStatus(PostStatus.DELETED));
         System.out.println(postRepository.existsByStatus(PostStatus.ACTIVE));
 
         log(postRepository.findByStatusAndAuthor(PostStatus.ACTIVE,"Darek Kowalski2"), "findByStatusAndAuthor");
-*/
+
         log(postRepository.findByStatusInAndAuthorLike(Set.of(PostStatus.ACTIVE),"Darek Kowalski"), "findByStatusInAndAuthorLike");
         log(postRepository.findByStatusInAndAuthorContaining(Set.of(PostStatus.ACTIVE),"Darek Kowalski"), "findByStatusInAndAuthorContaining");
         log(postRepository.findByStatusInAndAuthorStartingWith(Set.of(PostStatus.ACTIVE),"Darek Kowalski"), "findByStatusInAndAuthorStartingWith");
@@ -74,7 +87,7 @@ public class PostService {
                 LocalDate.of(2023,5,23).atStartOfDay(),
                 LocalDate.of(2023,5,27).atStartOfDay()
                 ), "findByStatusInAndCreatedDateTimeBetween"
-        );
+        );*/
 
     }
     private void log(List<Post> posts, String methodName){
