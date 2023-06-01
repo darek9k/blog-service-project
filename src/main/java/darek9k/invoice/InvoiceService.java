@@ -3,6 +3,10 @@ package darek9k.invoice;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class InvoiceService {
 
@@ -51,5 +55,20 @@ public class InvoiceService {
         Invoice newInvoice = new Invoice(invoice);
         newInvoice.setStatus(InvoiceStatus.DELETED);
         invoiceRepository.save(newInvoice);
+    }
+
+    public void find() {
+        log(invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
+                LocalDate.of(2023, 6,19),
+                LocalDate.of(2023,6,25),
+                "se",
+                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)),
+                "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
+        );
+    }
+
+    private void log(List<Invoice> invoices, String methodName){
+        System.out.println("--------------------"+methodName+"----------------------");
+        invoices.forEach(System.out::println);
     }
 }

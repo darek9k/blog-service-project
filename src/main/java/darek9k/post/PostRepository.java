@@ -2,7 +2,6 @@ package darek9k.post;
 
 import org.springframework.data.repository.CrudRepository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
