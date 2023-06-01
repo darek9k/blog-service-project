@@ -1,8 +1,9 @@
 package darek9k.post;
 
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.OptimisticLockException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PostService {
@@ -51,5 +52,13 @@ public class PostService {
         Post newPost = new Post(post);
         newPost.setStatus(PostStatus.DELETED);
         postRepository.save(newPost);
+    }
+
+    public void find() {
+        log(postRepository.findByStatus(PostStatus.ACTIVE), "findByStatus");
+    }
+    private void log(List<Post> posts, String methodName){
+        System.out.println("--------------------"+methodName+"----------------------");
+        posts.forEach(System.out::println);
     }
 }
