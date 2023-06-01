@@ -1,14 +1,17 @@
 insert into post (version, author, created_date_time, last_modified_date, publication_date, scope, status, text)
-    values (0, 'Darek Kowalski', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'ACTIVE', 'POST z data.sql');
+    values (0, 'Darek Kowalski', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'ACTIVE', 'POST1 z data.sql');
 
 insert into post (version, author, created_date_time, last_modified_date, publication_date, scope, status, text)
     values (0, 'Darek Kowalski2', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'ACTIVE', 'POST2 z data.sql');
 
 insert into post (version, author, created_date_time, last_modified_date, publication_date, scope, status, text)
-    values (0, 'Darek Kowalski', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'DELETED', 'POST z data.sql DELETED');
+    values (0, 'Darek Kowalski3', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'DELETED', 'POST3 z data.sql DELETED');
 
 insert into post (version, author, created_date_time, last_modified_date, publication_date, scope, status, text)
-    values (0, 'Darek Kowalski2', '2023-05-23T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'DELETED', 'POST2 z data.sql DELETED');
+    values (0, 'Darek Kowalski4', '2023-05-26T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'DELETED', 'POST4 z data.sql DELETED');
+
+insert into post (version, author, created_date_time, last_modified_date, publication_date, scope, status, text)
+     values (0, 'Darek Kowalski5', '2023-05-29T12:48:19','2023-05-24T12:48:19', null, 'PUBLIC', 'DELETED', 'POST5 z data.sql DELETED');
 
 insert into invoice (BUYER,CREATED_DATE_TIME,LAST_MODIFIED_DATE,PAYMENT_DATE,SELLER,STATUS,VERSION)
     values ('Buyer1', '2023-05-23T12:48:19', '2023-05-23T12:48:19', '2023-06-30', 'Seller1', 'ACTIVE', 0 );
