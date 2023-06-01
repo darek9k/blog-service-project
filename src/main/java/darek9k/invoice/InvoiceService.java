@@ -1,6 +1,7 @@
 package darek9k.invoice;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -65,8 +66,15 @@ public class InvoiceService {
                 Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)),
                 "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
         );
-    }
 
+        log(invoiceRepository.findByPaymentDateLessThanEqual(
+                LocalDate.of(2023,6,25),
+                Sort.by("buyer")),
+                "findByPaymentDateLessThanEqual");
+
+        log(invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(LocalDate.of(2023,06,25)),"findByPaymentDateLessThanEqualOrderByPaymentDateDesc");
+
+    }
     private void log(List<Invoice> invoices, String methodName){
         System.out.println("--------------------"+methodName+"----------------------");
         invoices.forEach(System.out::println);
