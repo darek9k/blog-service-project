@@ -58,10 +58,10 @@ public class InvoiceService {
     }
 
     public void find() {
-        log(invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithAndStatusIn(
+        log(invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
                 LocalDate.of(2023, 6,19),
                 LocalDate.of(2023,6,25),
-                "Da",
+                "se",
                 Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)),
                 "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
         );

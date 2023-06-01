@@ -8,7 +8,7 @@ import java.util.Set;
 
 public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
 
-    List<Invoice> findByPaymentDateBetweenAndSellerStartingWithAndStatusIn(
+    List<Invoice> findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
             LocalDate startDate, LocalDate endDate,
             String seller,
             Set<InvoiceStatus> postStatuses
