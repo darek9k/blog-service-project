@@ -69,19 +69,43 @@ public class InvoiceService {
                 "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
         );
 
+        log(() -> invoiceRepository.findBy(
+                        LocalDate.of(2023, 6, 19),
+                        LocalDate.of(2023, 6, 25),
+                        "se",
+                        Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT)
+                ),
+                "findBy"
+        );
+
         log(() -> invoiceRepository.findByPaymentDateLessThanEqual(
                         LocalDate.of(2023, 6, 25),
-                        Sort.by(Sort.Order.desc("PaymentDate"),
+                        Sort.by(Sort.Order.desc("paymentDate"),
                                 Sort.Order.asc("id")
                         )
                 ),
                 "findByPaymentDateLessThanEqual"
         );
 
+        log(() -> invoiceRepository.findByAndSort(
+                        LocalDate.of(2023, 6, 25),
+                        Sort.by(Sort.Order.desc("paymentDate"),
+                                Sort.Order.asc("id")
+                        )
+                ),
+                "findByAndSort"
+        );
+
         log(() -> invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(
                         LocalDate.of(2023, 6, 25)
                 ),
                 "findByPaymentDateLessThanEqualOrderByPaymentDateDesc"
+        );
+
+        log(() -> invoiceRepository.findAndOrderByPaymentDateDesc(
+                        LocalDate.of(2023, 6, 25)
+                ),
+                "findAndOrderByPaymentDateDesc"
         );
 
     }
