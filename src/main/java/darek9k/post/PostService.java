@@ -1,10 +1,14 @@
 package darek9k.post;
 
+import darek9k.invoice.Invoice;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
 
 @Service
 public class PostService {
@@ -72,7 +76,7 @@ public class PostService {
                         Sort.by(Sort.Order.asc("CreatedDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
-        /*System.out.println(postRepository.countByStatus(PostStatus.DELETED));
+        System.out.println(postRepository.countByStatus(PostStatus.DELETED));
         System.out.println(postRepository.existsByStatus(PostStatus.ACTIVE));
 
         log(postRepository.findByStatusAndAuthor(PostStatus.ACTIVE,"Darek Kowalski2"), "findByStatusAndAuthor");
@@ -87,11 +91,18 @@ public class PostService {
                 LocalDate.of(2023,5,23).atStartOfDay(),
                 LocalDate.of(2023,5,27).atStartOfDay()
                 ), "findByStatusInAndCreatedDateTimeBetween"
-        );*/
+        );
+
+        log(postRepository::find,"find");
 
     }
     private void log(List<Post> posts, String methodName){
         System.out.println("--------------------"+methodName+"----------------------");
         posts.forEach(System.out::println);
+    }
+
+    private void log(Supplier<List<Post>> listSupplier, String methodName) {
+        System.out.println("--------------------" + methodName + "----------------------");
+        listSupplier.get().forEach(System.out::println);
     }
 }
