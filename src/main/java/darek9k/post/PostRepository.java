@@ -12,29 +12,30 @@ import java.util.Set;
 
 public interface PostRepository extends CrudRepository<Post, Long>{
 
+    @Query("select p from Post p where p.id=:id")
+    Post find(Long id);
+
     @Query("select p from Post p")
     List<Post> find();
 
     @Query("select p from Post p where p.status='DELETED'")
     List<Post> findDeleted();
 
-    @Query("select p.id from Post p")
+    @Query("select p.id from Post p where p.status='DELETED'")
     List<Long> findIds();
 
     @Query("select distinct p.author from Post p")
     List<String> findAuthors();
 
-    @Query("select p from Post p where p.id:=id")
-    Post find(Long id);
-
-    @Query("select p from Post p where p.status:=status")
+    @Query("select p from Post p where p.status=:status")
     Post find(PostStatus status);
 
-    @Query("select p from Post p where p.id:=id")
+    @Query("select p from Post p where p.id=:id")
     Optional<Post> findOptional(Long id);
 
     @Query("select count(p) from Post p")
     long count();
+
 
     List<Post> findByStatus(PostStatus postStatus, Sort sort);
 

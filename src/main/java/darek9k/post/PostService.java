@@ -92,7 +92,7 @@ public class PostService {
                 ), "findByStatusInAndCreatedDateTimeBetween"
         );
 
-        log(postRepository::find,"find");
+        //log(postRepository::find,"find");
 
         log(() -> postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findByStatusOrderByCreatedDateTimeDesc");
 
@@ -114,7 +114,7 @@ public class PostService {
         System.out.println("find");
         System.out.println(postRepository.find(1L));
 
-        System.out.println("findOptional");
+       System.out.println("findOptional");
         System.out.println(postRepository.findOptional(4333L));
 
         System.out.println("count");
@@ -126,8 +126,8 @@ public class PostService {
         System.out.println("findAuthors");
         System.out.println(postRepository.findAuthors());
 
-        System.out.println("find po statusie");
-        System.out.println(postRepository.find(PostStatus.ACTIVE));
+        //System.out.println("find po statusie");
+       // System.out.println(postRepository.find(PostStatus.ACTIVE));
 
     }
     private void log(List<Post> posts, String methodName){
