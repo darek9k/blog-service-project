@@ -1,6 +1,5 @@
 package darek9k.post;
 
-import darek9k.invoice.Invoice;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -99,14 +98,36 @@ public class PostService {
 
         log(() -> postRepository.findOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findOrderByCreatedDateTimeDesc");
 
-      log(() -> postRepository.findByStatus(PostStatus.DELETED,
+        log(() -> postRepository.findByStatus(PostStatus.DELETED,
                         Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
-      log(() -> postRepository.findAndSort(PostStatus.DELETED,
+        log(() -> postRepository.findAndSort(PostStatus.DELETED,
                         Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
+
+        log(() -> postRepository.findByStatusInAndAuthorLike(Set.of(PostStatus.ACTIVE), "Darek Kowalski"), "findByStatusInAndAuthorLike");
+        log(() -> postRepository.find(Set.of(PostStatus.ACTIVE, PostStatus.DELETED), "Kowalski"), "findSetLikeAuthor");
+
+        System.out.println("=============================================================================================================================");
+        System.out.println("find");
+        System.out.println(postRepository.find(1L));
+
+        System.out.println("findOptional");
+        System.out.println(postRepository.findOptional(4333L));
+
+        System.out.println("count");
+        System.out.println(postRepository.count());
+
+        System.out.println("findIds");
+        System.out.println(postRepository.findIds());
+
+        System.out.println("findAuthors");
+        System.out.println(postRepository.findAuthors());
+
+        System.out.println("find po statusie");
+        System.out.println(postRepository.find(PostStatus.ACTIVE));
 
     }
     private void log(List<Post> posts, String methodName){
