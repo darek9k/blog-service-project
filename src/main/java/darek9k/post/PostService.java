@@ -1,6 +1,8 @@
 package darek9k.post;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -126,8 +128,20 @@ public class PostService {
         System.out.println("findAuthors");
         System.out.println(postRepository.findAuthors());
 
-        //System.out.println("find po statusie");
-       // System.out.println(postRepository.find(PostStatus.ACTIVE));
+        /*System.out.println("find po statusie");
+        System.out.println(postRepository.find(PostStatus.ACTIVE));*/
+
+        log(() -> postRepository.findByStatus(PostStatus.ACTIVE,
+                        PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))
+                ),
+                "findByStatus"
+        );
+        log(() -> postRepository.findAndSort(PostStatus.ACTIVE,
+                PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))
+        ),
+                "findAndSort"
+        );
+
 
     }
     private void log(List<Post> posts, String methodName){

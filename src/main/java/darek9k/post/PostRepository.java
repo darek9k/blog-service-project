@@ -1,5 +1,6 @@
 package darek9k.post;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -39,8 +40,16 @@ public interface PostRepository extends CrudRepository<Post, Long>{
 
     List<Post> findByStatus(PostStatus postStatus, Sort sort);
 
+    //paging
+    List<Post> findByStatus(PostStatus postStatus, Pageable pageable);
+
     @Query("select p from Post p where p.status=:postStatus")
     List<Post> findAndSort(PostStatus postStatus, Sort sort);
+
+    //paging
+    @Query("select p from Post p where p.status=:postStatus")
+    List<Post> findAndSort(PostStatus postStatus, Pageable pageable);
+
     List<Post> findByStatusOrderByCreatedDateTimeDesc(PostStatus postStatus);
 
     @Query("select p from Post p where p.status=:postStatus order by p.createdDateTime desc")
