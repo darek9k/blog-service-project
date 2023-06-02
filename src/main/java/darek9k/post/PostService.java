@@ -63,17 +63,17 @@ public class PostService {
         log(postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.ACTIVE), "findByStatusOrderByCreatedDateTimeDesc");
 
         log(postRepository.findByStatus(PostStatus.ACTIVE,
-                        Sort.by("CreatedDateTime")
+                        Sort.by("createdDateTime")
                 ), "findByStatus"
         );
 
         log(postRepository.findByStatus(PostStatus.ACTIVE,
-                        Sort.by("CreatedDateTime", "author")
+                        Sort.by("createdDateTime", "author")
                 ), "findByStatus"
         );
 
         log(postRepository.findByStatus(PostStatus.ACTIVE,
-                        Sort.by(Sort.Order.asc("CreatedDateTime"), Sort.Order.desc("author"))
+                        Sort.by(Sort.Order.asc("createdDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
         System.out.println(postRepository.countByStatus(PostStatus.DELETED));
@@ -94,6 +94,19 @@ public class PostService {
         );
 
         log(postRepository::find,"find");
+
+        log(() -> postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findByStatusOrderByCreatedDateTimeDesc");
+
+        log(() -> postRepository.findOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findOrderByCreatedDateTimeDesc");
+
+      log(() -> postRepository.findByStatus(PostStatus.DELETED,
+                        Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
+                ), "findByStatus"
+        );
+      log(() -> postRepository.findAndSort(PostStatus.DELETED,
+                        Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
+                ), "findByStatus"
+        );
 
     }
     private void log(List<Post> posts, String methodName){

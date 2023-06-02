@@ -12,10 +12,16 @@ public interface PostRepository extends CrudRepository<Post, Long>{
     @Query("select p from Post p")
     List<Post> find();
 
-    List<Post> findByStatus(PostStatus poststatus, Sort sort);
-    List<Post> findByStatusOrderByCreatedDateTimeDesc(PostStatus poststatus);
+    List<Post> findByStatus(PostStatus postStatus, Sort sort);
 
-    List<Post> findByStatusAndAuthor(PostStatus poststatus, String author);
+    @Query("select p from Post p where p.status=:postStatus")
+    List<Post> findAndSort(PostStatus postStatus, Sort sort);
+    List<Post> findByStatusOrderByCreatedDateTimeDesc(PostStatus postStatus);
+
+    @Query("select p from Post p where p.status=:postStatus order by p.createdDateTime desc")
+    List<Post> findOrderByCreatedDateTimeDesc(PostStatus postStatus);
+
+    List<Post> findByStatusAndAuthor(PostStatus postStatus, String author);
 
     List<Post> findByStatusInAndAuthorLike(Set<PostStatus> postStatuses, String Author);
 
@@ -25,8 +31,8 @@ public interface PostRepository extends CrudRepository<Post, Long>{
 
     List<Post> findByStatusInAndCreatedDateTimeBetween(Set<PostStatus> postStatuses, LocalDateTime startDate, LocalDateTime endDate);
 
-    long countByStatus(PostStatus poststatus);
+    long countByStatus(PostStatus postStatus);
 
-    boolean existsByStatus(PostStatus poststatus);
+    boolean existsByStatus(PostStatus postStatus);
 
 }
