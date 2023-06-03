@@ -1,5 +1,7 @@
 package darek9k.invoice;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -37,5 +39,10 @@ public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
     @Query("select i from Invoice i where i.paymentDate <= :paymentDate")
     List<Invoice> findByAndSort(
             LocalDate paymentDate, Sort sort
+    );
+
+    @Query("select i from Invoice i where i.paymentDate <= :paymentDate")
+    Page<Invoice> findByAndSort(
+            LocalDate paymentDate, Pageable pageable
     );
 }

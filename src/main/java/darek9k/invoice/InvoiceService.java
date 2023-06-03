@@ -1,6 +1,11 @@
 package darek9k.invoice;
 
+import darek9k.post.Post;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.OrderBy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -108,10 +113,27 @@ public class InvoiceService {
                 "findAndOrderByPaymentDateDesc"
         );
 
+        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(0,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(1,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(2,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(3,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+
     }
 
     private void log(Supplier<List<Invoice>> listSupplier, String methodName) {
         System.out.println("--------------------" + methodName + "----------------------");
         listSupplier.get().forEach(System.out::println);
+    }
+
+    private void logPage(Supplier<Page<Invoice>> pageSupplier, String methodName) {
+        System.out.println("--------------------" + methodName + "----------------------");
+        Page<Invoice> invoice = pageSupplier.get();
+
+        System.out.println("getContent(): " + invoice.getContent());
+        System.out.println("getTotalPages(): " + invoice.getTotalPages());
+        System.out.println("getTotalElements(): " + invoice.getTotalElements());
+        System.out.println("getNumber(): " + invoice.getNumber());
+        System.out.println("getNumberOfElements(): " + invoice.getNumberOfElements());
+        System.out.println("getSize(): " + invoice.getSize());
     }
 }
