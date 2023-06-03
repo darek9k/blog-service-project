@@ -1,6 +1,7 @@
 package darek9k.post;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -131,19 +132,18 @@ public class PostService {
         /*System.out.println("find po statusie");
         System.out.println(postRepository.find(PostStatus.ACTIVE));*/
 
-        log(() -> postRepository.findByStatus(PostStatus.ACTIVE,
-                        PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))
-                ),
-                "findByStatus"
-        );
-        log(() -> postRepository.findAndSort(PostStatus.ACTIVE,
-                PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))
-        ),
-                "findAndSort"
-        );
+        log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(1, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(2, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(3, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+
+        logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(1, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(2, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
+        logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(3, 2, Sort.by(Sort.Order.desc("id")))),"findByStatus");
 
 
-    }
+     }
     private void log(List<Post> posts, String methodName){
         System.out.println("--------------------"+methodName+"----------------------");
         posts.forEach(System.out::println);
@@ -152,5 +152,17 @@ public class PostService {
     private void log(Supplier<List<Post>> listSupplier, String methodName) {
         System.out.println("--------------------" + methodName + "----------------------");
         listSupplier.get().forEach(System.out::println);
+    }
+
+    private void logPage(Supplier<Page<Post>> pageSupplier, String methodName) {
+        System.out.println("--------------------" + methodName + "----------------------");
+        Page<Post> page = pageSupplier.get();
+
+        System.out.println("getContent(): " + page.getContent());
+        System.out.println("getTotalPages(): " + page.getTotalPages());
+        System.out.println("getTotalElements(): " + page.getTotalElements());
+        System.out.println("getNumber(): " + page.getNumber());
+        System.out.println("getNumberOfElements(): " + page.getNumberOfElements());
+        System.out.println("getSize(): " + page.getSize());
     }
 }
