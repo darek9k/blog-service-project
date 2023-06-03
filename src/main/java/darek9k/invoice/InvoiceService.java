@@ -1,11 +1,9 @@
 package darek9k.invoice;
 
-import darek9k.post.Post;
+import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.persistence.OrderBy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -65,7 +63,7 @@ public class InvoiceService {
     }
 
     public void find() {
-        log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
+        LogUtil.log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
                         LocalDate.of(2023, 6, 19),
                         LocalDate.of(2023, 6, 25),
                         "se",
@@ -74,7 +72,7 @@ public class InvoiceService {
                 "findByPaymentDateBetweenAndSellerStartingWithAndStatusIn"
         );
 
-        log(() -> invoiceRepository.findBy(
+        LogUtil.log(() -> invoiceRepository.findBy(
                         LocalDate.of(2023, 6, 19),
                         LocalDate.of(2023, 6, 25),
                         "se",
@@ -83,7 +81,7 @@ public class InvoiceService {
                 "findBy"
         );
 
-        log(() -> invoiceRepository.findByPaymentDateLessThanEqual(
+        LogUtil.log(() -> invoiceRepository.findByPaymentDateLessThanEqual(
                         LocalDate.of(2023, 6, 25),
                         Sort.by(Sort.Order.desc("paymentDate"),
                                 Sort.Order.asc("id")
@@ -92,7 +90,7 @@ public class InvoiceService {
                 "findByPaymentDateLessThanEqual"
         );
 
-        log(() -> invoiceRepository.findByAndSort(
+        LogUtil.log(() -> invoiceRepository.findByAndSort(
                         LocalDate.of(2023, 6, 25),
                         Sort.by(Sort.Order.desc("paymentDate"),
                                 Sort.Order.asc("id")
@@ -101,39 +99,21 @@ public class InvoiceService {
                 "findByAndSort"
         );
 
-        log(() -> invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(
+        LogUtil.log(() -> invoiceRepository.findByPaymentDateLessThanEqualOrderByPaymentDateDesc(
                         LocalDate.of(2023, 6, 25)
                 ),
                 "findByPaymentDateLessThanEqualOrderByPaymentDateDesc"
         );
 
-        log(() -> invoiceRepository.findAndOrderByPaymentDateDesc(
+        LogUtil.log(() -> invoiceRepository.findAndOrderByPaymentDateDesc(
                         LocalDate.of(2023, 6, 25)
                 ),
                 "findAndOrderByPaymentDateDesc"
         );
 
-        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(0,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
-        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(1,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
-        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(2,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
-        logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(3,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
-
-    }
-
-    private void log(Supplier<List<Invoice>> listSupplier, String methodName) {
-        System.out.println("--------------------" + methodName + "----------------------");
-        listSupplier.get().forEach(System.out::println);
-    }
-
-    private void logPage(Supplier<Page<Invoice>> pageSupplier, String methodName) {
-        System.out.println("--------------------" + methodName + "----------------------");
-        Page<Invoice> invoice = pageSupplier.get();
-
-        System.out.println("getContent(): " + invoice.getContent());
-        System.out.println("getTotalPages(): " + invoice.getTotalPages());
-        System.out.println("getTotalElements(): " + invoice.getTotalElements());
-        System.out.println("getNumber(): " + invoice.getNumber());
-        System.out.println("getNumberOfElements(): " + invoice.getNumberOfElements());
-        System.out.println("getSize(): " + invoice.getSize());
+        LogUtil.logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(0,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        LogUtil.logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(1,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        LogUtil.logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(2,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
+        LogUtil.logPage(()->invoiceRepository.findByAndSort(LocalDate.of(2023,6,28), PageRequest.of(3,3, Sort.by(Sort.Order.desc("seller")))), "findAndSortPageable");
     }
 }
