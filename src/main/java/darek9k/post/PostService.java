@@ -1,13 +1,14 @@
 package darek9k.post;
 
+import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @Service
 public class PostService {
@@ -94,27 +95,27 @@ public class PostService {
 
         //log(postRepository::find,"find");
 
-        log(() -> postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findByStatusOrderByCreatedDateTimeDesc");
+        LogUtil.log(() -> postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findByStatusOrderByCreatedDateTimeDesc");
 
-        log(() -> postRepository.findOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findOrderByCreatedDateTimeDesc");
+        LogUtil.log(() -> postRepository.findOrderByCreatedDateTimeDesc(PostStatus.DELETED), "findOrderByCreatedDateTimeDesc");
 
-        log(() -> postRepository.findByStatus(PostStatus.DELETED,
+        LogUtil.log(() -> postRepository.findByStatus(PostStatus.DELETED,
                         Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
-        log(() -> postRepository.findAndSort(PostStatus.DELETED,
+        LogUtil.log(() -> postRepository.findAndSort(PostStatus.DELETED,
                         Sort.by(Sort.Order.desc("createdDateTime"), Sort.Order.desc("author"))
                 ), "findByStatus"
         );
 
-        log(() -> postRepository.findByStatusInAndAuthorLike(Set.of(PostStatus.ACTIVE), "Darek Kowalski"), "findByStatusInAndAuthorLike");
-        log(() -> postRepository.find(Set.of(PostStatus.ACTIVE, PostStatus.DELETED), "Kowalski"), "findSetLikeAuthor");
+        LogUtil.log(() -> postRepository.findByStatusInAndAuthorLike(Set.of(PostStatus.ACTIVE), "Darek Kowalski"), "findByStatusInAndAuthorLike");
+        LogUtil.log(() -> postRepository.find(Set.of(PostStatus.ACTIVE, PostStatus.DELETED), "Kowalski"), "findSetLikeAuthor");
 
         System.out.println("=============================================================================================================================");
         System.out.println("find");
         System.out.println(postRepository.find(1L));
 
-       System.out.println("findOptional");
+        System.out.println("findOptional");
         System.out.println(postRepository.findOptional(4333L));
 
         System.out.println("count");
@@ -126,8 +127,19 @@ public class PostService {
         System.out.println("findAuthors");
         System.out.println(postRepository.findAuthors());
 
-        //System.out.println("find po statusie");
-       // System.out.println(postRepository.find(PostStatus.ACTIVE));
+        /*System.out.println("find po statusie");
+        System.out.println(postRepository.find(PostStatus.ACTIVE));*/
+
+        LogUtil.log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus");
+        LogUtil.log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(1, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus");
+        LogUtil.log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(2, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus");
+        LogUtil.log(() -> postRepository.findByStatus(PostStatus.ACTIVE, PageRequest.of(3, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus");
+
+        LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(0, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 0");
+        LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(1, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 1");
+        LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(2, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 2");
+        LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(3, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 3");
+
 
     }
     private void log(List<Post> posts, String methodName){
@@ -135,8 +147,4 @@ public class PostService {
         posts.forEach(System.out::println);
     }
 
-    private void log(Supplier<List<Post>> listSupplier, String methodName) {
-        System.out.println("--------------------" + methodName + "----------------------");
-        listSupplier.get().forEach(System.out::println);
-    }
 }
