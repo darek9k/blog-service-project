@@ -2,11 +2,13 @@ package darek9k.post;
 
 import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -59,7 +61,18 @@ public class PostService {
         postRepository.save(newPost);
     }
 
-    public void find() {
+    public Page<FindPostResponse> find(String textContaining,
+                           int page,
+                           int size) {
+        return postRepository.findActiveAndPublished(textContaining,
+                        LocalDateTime.now(),
+                        PageRequest.of(page,
+                                size,
+                                Sort.by(Sort.Order.desc("createdDateTime"))))
+                .map(FindPostResponse::from);
+    }
+
+    public void find2() {
         log(postRepository.findByStatusOrderByCreatedDateTimeDesc(PostStatus.ACTIVE), "findByStatusOrderByCreatedDateTimeDesc");
 
         log(postRepository.findByStatus(PostStatus.ACTIVE,
@@ -139,8 +152,6 @@ public class PostService {
         LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(1, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 1");
         LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(2, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 2");
         LogUtil.logPage(() -> postRepository.findAllByStatus(PostStatus.ACTIVE, PageRequest.of(3, 2, Sort.by(Sort.Order.desc("id")))), "findByStatus Page 3");
-
-
     }
     private void log(List<Post> posts, String methodName){
         System.out.println("--------------------"+methodName+"----------------------");

@@ -12,7 +12,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public interface PostRepository extends CrudRepository<Post, Long>{
+public interface PostRepository extends CrudRepository<Post, Long> {
+
+    @Query("select p from Post p where p.text like %:textContaining% " +
+            "and p.status='ACTIVE' " +
+            "and (p.publicationDate is null or p.publicationDate <= :publicationDate)")
+    Page<Post> findActiveAndPublished(String textContaining, LocalDateTime publicationDate, Pageable pageable);
 
     @Query("select p from Post p where p.id=:id")
     Post find(Long id);
