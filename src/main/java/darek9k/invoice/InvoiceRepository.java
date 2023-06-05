@@ -20,6 +20,10 @@ public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
             Pageable pageable
     );
 
+    Page<Invoice> findByBuyerContainingAndSellerContainingAndStatusInOrderByPaymentDate(
+            String buyer, String seller, Set<InvoiceStatus> invoiceStatuses, Pageable pageable
+    );
+
     List<Invoice> findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
             LocalDate startDate, LocalDate endDate,
             String seller,

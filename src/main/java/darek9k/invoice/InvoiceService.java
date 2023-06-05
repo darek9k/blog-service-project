@@ -2,16 +2,13 @@ package darek9k.invoice;
 
 import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @Service
 public class InvoiceService {
@@ -62,13 +59,23 @@ public class InvoiceService {
         newInvoice.setStatus(InvoiceStatus.DELETED);
         invoiceRepository.save(newInvoice);
     }
-    public Page<FindInvoiceResponse> find(String seller, String buyer, int page, int size){
-            return invoiceRepository.findByPaymentDateAndSellerAndBuyer(
-                    Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
-                    seller,
-                    buyer,
-                    PageRequest.of(page, size)
-            ).map(FindInvoiceResponse::from);
+
+    public Page<FindInvoiceResponse> find(String seller, String buyer, int page, int size) {
+        return invoiceRepository.findByPaymentDateAndSellerAndBuyer(
+                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
+                seller,
+                buyer,
+                PageRequest.of(page, size)
+        ).map(FindInvoiceResponse::from);
+    }
+
+    public Page<FindInvoiceResponse> find2(String seller, String buyer, int page, int size){
+        return invoiceRepository.findByBuyerContainingAndSellerContainingAndStatusInOrderByPaymentDate(
+                buyer,
+                seller,
+                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
+                PageRequest.of(page,size)
+        ).map(invoice -> FindInvoiceResponse.from(invoice));
     }
     public void find2() {
         LogUtil.log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
