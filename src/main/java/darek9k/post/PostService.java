@@ -2,9 +2,13 @@ package darek9k.post;
 
 import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.persistence.criteria.Predicate;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -61,9 +65,65 @@ public class PostService {
         postRepository.save(newPost);
     }
 
+    public Page<FindPostResponse> find(Pageable pageable) {
+        Specification<Post> specification = preparePostSpecificationUsingPredicates();
+        return postRepository.findAll(specification, pageable)
+                .map(FindPostResponse::from);
+    }
+
+    @NotNull
+    private static Specification<Post> preparePostSpecification() {
+        Specification<Post> statusInSpec = (root, query, criteriaBuilder) ->
+                root.get("status").in(Set.of(PostStatus.ACTIVE, PostStatus.DELETED));
+
+        Specification<Post> textLikeSpec = (root, query, criteriaBuilder) ->
+                criteriaBuilder.like(root.get("text"), "%" + "POST" + "%");
+
+        Specification<Post> publicationDateSpec = (root, query, criteriaBuilder) ->
+        {
+            Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
+            Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), LocalDateTime.now());
+            return criteriaBuilder.or(publicationDateIsNull,publicationDateLE);
+        };
+
+        Specification<Post> createDateTimeBetween = (root, query, criteriaBuilder) ->
+                criteriaBuilder.between(root.get("createdDateTime"),
+                        LocalDateTime.now().minusDays(1),
+                        LocalDateTime.now().plusDays(1));
+
+        Specification<Post> specificaton = statusInSpec
+                .and(textLikeSpec)
+                .and(publicationDateSpec)
+                .and(createDateTimeBetween);
+
+        return specificaton;
+    }
+
+    private static Specification<Post> preparePostSpecificationUsingPredicates() {
+        
+        return (root, query, criteriaBuilder) ->
+        {
+            Predicate statusPred = root.get("status").in(Set.of(PostStatus.ACTIVE, PostStatus.DELETED));
+            Predicate textPredicate = criteriaBuilder.like(root.get("text"), "%" + "POST" + "%");
+
+            Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
+            Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), LocalDateTime.now());
+            Predicate publicationDatePre = criteriaBuilder.or(publicationDateIsNull, publicationDateLE);
+
+            Predicate createdDateTimePred = criteriaBuilder.between(root.get("createdDateTime"),
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1));
+
+            return criteriaBuilder.and(statusPred,
+                    textPredicate,
+                    publicationDatePre,
+                    createdDateTimePred);
+        };
+    }
+
     public Page<FindPostResponse> find(String textContaining,
-                           int page,
-                           int size) {
+                                       int page,
+                                       int size) {
         return postRepository.findActiveAndPublished(textContaining,
                         LocalDateTime.now(),
                         PageRequest.of(page,
