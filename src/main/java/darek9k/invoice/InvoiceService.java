@@ -61,11 +61,11 @@ public class InvoiceService {
     }
 
     public Page<FindInvoiceResponse> find(String seller, String buyer, int page, int size) {
-        return invoiceRepository.findByPaymentDateAndSellerAndBuyer(
+        return invoiceRepository.findByStatusAndSellerAndBuyer(
                 Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
                 seller,
                 buyer,
-                PageRequest.of(page, size)
+                PageRequest.of(page, size, Sort.by(Sort.Order.asc("paymentDate")))
         ).map(FindInvoiceResponse::from);
     }
 
@@ -74,8 +74,8 @@ public class InvoiceService {
                 buyer,
                 seller,
                 Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
-                PageRequest.of(page,size)
-        ).map(invoice -> FindInvoiceResponse.from(invoice));
+                PageRequest.of(page, size)
+        ).map(FindInvoiceResponse::from);
     }
     public void find2() {
         LogUtil.log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
