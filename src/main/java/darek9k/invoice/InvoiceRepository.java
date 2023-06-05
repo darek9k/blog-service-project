@@ -12,6 +12,14 @@ import java.util.Set;
 
 public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
 
+    @Query("select i from Invoice i where i.status in :invoiceStatuses and i.seller like %:seller% and i.buyer like %:buyer% order by i.paymentDate asc")
+    Page<Invoice> findByPaymentDateAndSellerAndBuyer(
+            Set<InvoiceStatus> invoiceStatuses,
+            String seller,
+            String buyer,
+            Pageable pageable
+    );
+
     List<Invoice> findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
             LocalDate startDate, LocalDate endDate,
             String seller,

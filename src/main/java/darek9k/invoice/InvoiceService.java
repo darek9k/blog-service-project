@@ -2,6 +2,7 @@ package darek9k.invoice;
 
 import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -61,8 +62,15 @@ public class InvoiceService {
         newInvoice.setStatus(InvoiceStatus.DELETED);
         invoiceRepository.save(newInvoice);
     }
-
-    public void find() {
+    public Page<FindInvoiceResponse> find(String seller, String buyer, int page, int size){
+            return invoiceRepository.findByPaymentDateAndSellerAndBuyer(
+                    Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
+                    seller,
+                    buyer,
+                    PageRequest.of(page, size)
+            ).map(FindInvoiceResponse::from);
+    }
+    public void find2() {
         LogUtil.log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
                         LocalDate.of(2023, 6, 19),
                         LocalDate.of(2023, 6, 25),
