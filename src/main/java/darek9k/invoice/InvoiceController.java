@@ -1,6 +1,7 @@
 package darek9k.invoice;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,9 +44,11 @@ public class InvoiceController {
     }
 
     @GetMapping
-    public ResponseEntity<Void> find() {
-        invoiceService.find();
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<Page<FindInvoiceResponse>> find(@RequestParam(value = "s", defaultValue = "") String seller,
+                                                         @RequestParam(value = "b", defaultValue = "") String buyer,
+                                                         @RequestParam int page,
+                                                         @RequestParam int size) {
+        return ResponseEntity.ok(invoiceService.find(seller, buyer, page, size));
     }
 
 }

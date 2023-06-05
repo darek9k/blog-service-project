@@ -8,9 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
-import java.util.function.Supplier;
 
 @Service
 public class InvoiceService {
@@ -62,7 +60,24 @@ public class InvoiceService {
         invoiceRepository.save(newInvoice);
     }
 
-    public void find() {
+    public Page<FindInvoiceResponse> find(String seller, String buyer, int page, int size) {
+        return invoiceRepository.findByStatusAndSellerAndBuyer(
+                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
+                seller,
+                buyer,
+                PageRequest.of(page, size, Sort.by(Sort.Order.asc("paymentDate")))
+        ).map(FindInvoiceResponse::from);
+    }
+
+    public Page<FindInvoiceResponse> find2(String seller, String buyer, int page, int size){
+        return invoiceRepository.findByBuyerContainingAndSellerContainingAndStatusInOrderByPaymentDate(
+                buyer,
+                seller,
+                Set.of(InvoiceStatus.ACTIVE, InvoiceStatus.DRAFT),
+                PageRequest.of(page, size)
+        ).map(FindInvoiceResponse::from);
+    }
+    public void find2() {
         LogUtil.log(() -> invoiceRepository.findByPaymentDateBetweenAndSellerStartingWithIgnoreCaseAndStatusIn(
                         LocalDate.of(2023, 6, 19),
                         LocalDate.of(2023, 6, 25),
