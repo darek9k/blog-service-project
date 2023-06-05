@@ -4,7 +4,9 @@ import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -61,9 +63,17 @@ public class PostService {
         postRepository.save(newPost);
     }
 
+    public Page<FindPostResponse> find(Pageable pageable) {
+        Specification<Post> specification = (root, query, criteriaBuilder) ->
+                criteriaBuilder.equal(root.get("status"), PostStatus.ACTIVE);
+
+        return postRepository.findAll(specification, pageable)
+                .map(FindPostResponse::from);
+    }
+
     public Page<FindPostResponse> find(String textContaining,
-                           int page,
-                           int size) {
+                                       int page,
+                                       int size) {
         return postRepository.findActiveAndPublished(textContaining,
                         LocalDateTime.now(),
                         PageRequest.of(page,
