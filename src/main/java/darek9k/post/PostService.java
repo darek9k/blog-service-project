@@ -71,6 +71,28 @@ public class PostService {
                 .map(FindPostResponse::from);
     }
 
+    private static Specification<Post> preparePostSpecificationUsingPredicates() {
+
+        return (root, query, criteriaBuilder) ->
+        {
+            Predicate statusPred = root.get("status").in(Set.of(PostStatus.ACTIVE, PostStatus.DELETED));
+            Predicate textPredicate = criteriaBuilder.like(root.get("text"), "%" + "POST" + "%");
+
+            Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
+            Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), LocalDateTime.now());
+            Predicate publicationDatePre = criteriaBuilder.or(publicationDateIsNull, publicationDateLE);
+
+            Predicate createdDateTimePred = criteriaBuilder.between(root.get("createdDateTime"),
+                    LocalDateTime.now().minusDays(1),
+                    LocalDateTime.now().plusDays(1));
+
+            return criteriaBuilder.and(statusPred,
+                    textPredicate,
+                    publicationDatePre,
+                    createdDateTimePred);
+        };
+    }
+
     @NotNull
     private static Specification<Post> preparePostSpecification() {
         Specification<Post> statusInSpec = (root, query, criteriaBuilder) ->
@@ -97,28 +119,6 @@ public class PostService {
                 .and(createDateTimeBetween);
 
         return specificaton;
-    }
-
-    private static Specification<Post> preparePostSpecificationUsingPredicates() {
-        
-        return (root, query, criteriaBuilder) ->
-        {
-            Predicate statusPred = root.get("status").in(Set.of(PostStatus.ACTIVE, PostStatus.DELETED));
-            Predicate textPredicate = criteriaBuilder.like(root.get("text"), "%" + "POST" + "%");
-
-            Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
-            Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), LocalDateTime.now());
-            Predicate publicationDatePre = criteriaBuilder.or(publicationDateIsNull, publicationDateLE);
-
-            Predicate createdDateTimePred = criteriaBuilder.between(root.get("createdDateTime"),
-                    LocalDateTime.now().minusDays(1),
-                    LocalDateTime.now().plusDays(1));
-
-            return criteriaBuilder.and(statusPred,
-                    textPredicate,
-                    publicationDatePre,
-                    createdDateTimePred);
-        };
     }
 
     public Page<FindPostResponse> find(String textContaining,
