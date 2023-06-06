@@ -3,6 +3,7 @@ package darek9k.invoice;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -10,7 +11,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
-public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
+public interface InvoiceRepository extends CrudRepository<Invoice, Long>, JpaSpecificationExecutor<Invoice> {
 
     @Query("select i from Invoice i where i.status in :invoiceStatuses and i.seller ilike %:seller% and i.buyer ilike %:buyer%")
     Page<Invoice> findByStatusAndSellerAndBuyer(
