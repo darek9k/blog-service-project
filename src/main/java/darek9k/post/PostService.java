@@ -100,31 +100,36 @@ public class PostService {
     }
 
     @NotNull
-    private static Specification<Post> preparePostSpecification() {
-        Specification<Post> statusInSpec = (root, query, criteriaBuilder) ->
-                root.get("status").in(Set.of(PostStatus.ACTIVE, PostStatus.DELETED));
+    private static Specification<Post> preparePostSpecification(FindPostRequest findPostRequest) {
+        Specification<Post> specification = Specification.where(null);
 
-        Specification<Post> textLikeSpec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("text"), "%" + "POST" + "%");
-
-        Specification<Post> publicationDateSpec = (root, query, criteriaBuilder) ->
-        {
-            Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
-            Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), LocalDateTime.now());
-            return criteriaBuilder.or(publicationDateIsNull,publicationDateLE);
-        };
-
-        Specification<Post> createDateTimeBetween = (root, query, criteriaBuilder) ->
-                criteriaBuilder.between(root.get("createdDateTime"),
-                        LocalDateTime.now().minusDays(1),
-                        LocalDateTime.now().plusDays(1));
-
-        Specification<Post> specificaton = statusInSpec
-                .and(textLikeSpec)
-                .and(publicationDateSpec)
-                .and(createDateTimeBetween);
-
-        return specificaton;
+        if (findPostRequest.postStatuses() != null && !findPostRequest.postStatuses().isEmpty()) {
+            Specification<Post> statusInSpec = (root, query, criteriaBuilder) ->
+                    root.get("status").in(findPostRequest.postStatuses());
+            specification = specification.and(statusInSpec);
+        }
+        if (findPostRequest.text() != null) {
+            Specification<Post> textLikeSpec = (root, query, criteriaBuilder) ->
+                    criteriaBuilder.like(criteriaBuilder.lower(root.get("text")),
+                            "%" + findPostRequest.text().toLowerCase() + "%");
+            specification = specification.and(textLikeSpec);
+        }
+        if (findPostRequest.publicationDate() != null) {
+            Specification<Post> publicationDateSpec = (root, query, criteriaBuilder) ->
+            {
+                Predicate publicationDateIsNull = criteriaBuilder.isNull(root.get("publicationDate"));
+                Predicate publicationDateLE = criteriaBuilder.lessThanOrEqualTo(root.get("publicationDate"), findPostRequest.publicationDate());
+                return criteriaBuilder.or(publicationDateIsNull, publicationDateLE);
+            };
+            specification = specification.and(publicationDateSpec);
+        }
+        if (findPostRequest.createdDateMin() != null && findPostRequest.createdDateMax() != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.between(root.get("createdDateTime"),
+                            findPostRequest.createdDateMin(),
+                            findPostRequest.createdDateMax()));
+        }
+        return specification;
     }
 
     public Page<FindPostResponse> find(String textContaining,
