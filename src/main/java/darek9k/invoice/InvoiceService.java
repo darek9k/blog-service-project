@@ -100,29 +100,32 @@ public class InvoiceService {
     }
 
 
-    public Page<FindInvoiceResponse> findWithSpecifications(Pageable pageable) {
-        Specification<Invoice> invoiceSpecification = prepareSpec();
+    public Page<FindInvoiceResponse> findWithSpecifications(FindInvoiceRequest findInvoiceRequest, Pageable pageable) {
+        Specification<Invoice> invoiceSpecification = prepareSpec(findInvoiceRequest);
 
         return invoiceRepository.findAll(invoiceSpecification, pageable)
                 .map(FindInvoiceResponse::from);
     }
 
     @NotNull
-    private static Specification<Invoice> prepareSpec() {
-        Specification<Invoice> paymentDataSpec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.between(root.get("paymentDate"),
-                        LocalDate.now().minusYears(1),
-                        LocalDate.now().plusYears(1));
+    private static Specification<Invoice> prepareSpec(FindInvoiceRequest findInvoiceRequest) {
+        Specification<Invoice> specification = Specification.where(null);
+        if (findInvoiceRequest.paymentDateMin() != null && findInvoiceRequest.paymentDateMax() != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    criteriaBuilder.between(root.get("paymentDate"),
+                            findInvoiceRequest.paymentDateMin(),
+                            findInvoiceRequest.paymentDateMax()));
 
-        Specification<Invoice> sellerSpec = (root, query, criteriaBuilder) ->
-                criteriaBuilder.like(root.get("seller"), "%" + "Sel" + "%");
-
-        Specification<Invoice> statusInSpec = (root, query, criteriaBuilder) ->
-                root.get("status").in(InvoiceStatus.ACTIVE, InvoiceStatus.DELETED);
-
-        Specification<Invoice> invoiceSpecification =
-                paymentDataSpec.and(sellerSpec).and(statusInSpec);
-        return invoiceSpecification;
+        }
+        if (findInvoiceRequest.seller() != null) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    likeIgnoreCase(criteriaBuilder, root.get("seller"), findInvoiceRequest.seller()));
+        }
+        if (findInvoiceRequest.invoiceStatuses() != null && !findInvoiceRequest.invoiceStatuses().isEmpty()) {
+            specification = specification.and((root, query, criteriaBuilder) ->
+                    root.get("status").in(findInvoiceRequest.invoiceStatuses()));
+        }
+        return specification;
     }
 
 
