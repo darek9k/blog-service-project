@@ -70,7 +70,7 @@ public class PostController {
     }
 
     @PostMapping("/find")
-    public ResponseEntity<Page<FindPostResponse>> find(Pageable pageable) {
-        return ResponseEntity.ok(postService.find(pageable));
+    public ResponseEntity<Page<FindPostResponse>> find(@RequestBody FindPostRequest findPostRequest, Pageable pageable) {
+        return ResponseEntity.ok(postService.find(findPostRequest, pageable));
     }
 }
