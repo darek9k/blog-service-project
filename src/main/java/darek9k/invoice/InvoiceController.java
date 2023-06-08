@@ -53,8 +53,9 @@ public class InvoiceController {
     }
 
     @PostMapping("/find")
-    public ResponseEntity<Page<FindInvoiceResponse>> find(Pageable pageable) {
-        return ResponseEntity.ok(invoiceService.find(pageable));
+    public ResponseEntity<Page<FindInvoiceResponse>> find(@RequestBody FindInvoiceRequest findInvoiceRequest,
+                                                          Pageable pageable) {
+        return ResponseEntity.ok(invoiceService.find(findInvoiceRequest, pageable));
     }
 
 }
