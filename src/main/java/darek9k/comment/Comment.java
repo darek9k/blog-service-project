@@ -1,5 +1,6 @@
 package darek9k.comment;
 
+import darek9k.post.Post;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,25 +35,13 @@ public class Comment {
     @NotNull
     @Size(max = 100)
     private String author;
-    @NotNull
-    private Long postId;
+
+    @ManyToOne
+    private Post post;
 
     public Comment() {
     }
 
-    public Comment(Comment old) {
-        this.id = old.id;
-        this.createdDateTime = old.createdDateTime;
-        this.lastModifiedDate = old.lastModifiedDate;
-        this.text = old.text;
-        this.author = old.author;
-        this.postId = old.postId;
-    }
-
-    public Comment(String text, String author) {
-        this.text = text;
-        this.author = author;
-    }
 
     public Long getId() {
         return id;
@@ -96,12 +85,12 @@ public class Comment {
         this.author = author;
     }
 
-    public Long getPostId() {
-        return postId;
+    public Post getPost() {
+        return post;
     }
 
-    public void setPostId(Long postId) {
-        this.postId = postId;
+    public void setPost(Post post) {
+        this.post = post;
     }
 
     @Override
@@ -112,7 +101,6 @@ public class Comment {
                 ", lastModifiedDate=" + lastModifiedDate +
                 ", text='" + text + '\'' +
                 ", author='" + author + '\'' +
-                ", postId=" + postId +
                 '}';
     }
 }
