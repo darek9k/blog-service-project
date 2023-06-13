@@ -1,5 +1,6 @@
 package darek9k.post;
 
+import darek9k.comment.Comment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -46,6 +48,8 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
+    @OneToMany(mappedBy = "post")
+    private Set<Comment> comments;
     public Post() {
     }
 
@@ -67,6 +71,14 @@ public class Post {
         this.author = author;
         this.publicationDate = publicationDate;
         this.status = PostStatus.ACTIVE;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     public Long getId() {
