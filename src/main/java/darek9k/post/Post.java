@@ -73,14 +73,6 @@ public class Post {
         this.status = PostStatus.ACTIVE;
     }
 
-    public Set<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(Set<Comment> comments) {
-        this.comments = comments;
-    }
-
     public Long getId() {
         return id;
     }

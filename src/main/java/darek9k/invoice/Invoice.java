@@ -1,5 +1,6 @@
 package darek9k.invoice;
 
+import darek9k.invoice.detail.InvoiceDetail;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -43,11 +45,14 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
-    public Invoice(){
+    @OneToMany(mappedBy = "invoice")
+    private Set<InvoiceDetail> invoiceDetails;
+
+    public Invoice() {
 
     }
 
-   public Invoice(Invoice old) {
+    public Invoice(Invoice old) {
         this.id = old.id;
         this.version = old.version;
         this.createdDateTime = old.createdDateTime;
@@ -129,6 +134,14 @@ public class Invoice {
         this.status = status;
     }
 
+    public Set<InvoiceDetail> getInvoiceDetails() {
+        return invoiceDetails;
+    }
+
+    public void setInvoiceDetails(Set<InvoiceDetail> invoiceDetails) {
+        this.invoiceDetails = invoiceDetails;
+    }
+
     @Override
     public String toString() {
         return "Invoice{" +
@@ -142,8 +155,4 @@ public class Invoice {
                 ", status=" + status +
                 '}';
     }
-
-    public static class CreateInvoiceRequest {
-    }
-
 }

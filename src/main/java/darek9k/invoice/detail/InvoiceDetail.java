@@ -1,6 +1,6 @@
 package darek9k.invoice.detail;
 
-import darek9k.invoice.InvoiceStatus;
+import darek9k.invoice.Invoice;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,10 +37,10 @@ public class InvoiceDetail {
 
     @NotNull
     private BigDecimal price;
+    @ManyToOne(optional = false)
+    private Invoice invoice;
 
-    private Long invoiceId;
-
-    public InvoiceDetail(){
+    public InvoiceDetail() {
     }
 
     public Long getId() {
@@ -92,12 +91,12 @@ public class InvoiceDetail {
         this.price = price;
     }
 
-    public Long getInvoiceId() {
-        return invoiceId;
+    public Invoice getInvoice() {
+        return invoice;
     }
 
-    public void setInvoiceId(Long invoiceId) {
-        this.invoiceId = invoiceId;
+    public void setInvoice(Invoice invoice) {
+        this.invoice = invoice;
     }
 
     @Override
@@ -109,7 +108,6 @@ public class InvoiceDetail {
                 ", lastModifiedDate=" + lastModifiedDate +
                 ", productName='" + productName + '\'' +
                 ", price=" + price +
-                ", invoiceId=" + invoiceId +
                 '}';
     }
 }

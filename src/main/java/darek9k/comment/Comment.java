@@ -36,7 +36,7 @@ public class Comment {
     @Size(max = 100)
     private String author;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Post post;
 
     public Comment() {
