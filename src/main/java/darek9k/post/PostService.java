@@ -40,6 +40,11 @@ public class PostService {
                 .orElseThrow(EntityNotFoundException::new);//either give ReadPostResponse or throw an exception.
     }
 
+    public Post findPostById(Long id) {
+        return postRepository.findById(id)//gives optional Post
+                .orElseThrow(() -> new EntityNotFoundException("Post not found"));//either give ReadPostResponse or throw an exception.
+    }
+
     public void update(Long id, UpdatePostRequest updatePostRequest) {
         Post post = postRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
