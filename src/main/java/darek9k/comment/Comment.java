@@ -42,6 +42,12 @@ public class Comment {
     public Comment() {
     }
 
+    public Comment(String text, String author, Post post) {
+        this.text = text;
+        this.author = author;
+        this.post = post;
+    }
+
 
     public Long getId() {
         return id;
