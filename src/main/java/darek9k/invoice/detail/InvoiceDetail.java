@@ -43,6 +43,12 @@ public class InvoiceDetail {
     public InvoiceDetail() {
     }
 
+    public InvoiceDetail(String productName, BigDecimal price, Invoice invoice) {
+        this.productName = productName;
+        this.price = price;
+        this.invoice = invoice;
+    }
+
     public Long getId() {
         return id;
     }
