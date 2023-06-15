@@ -43,8 +43,8 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler({NoSuchElementException.class, EntityNotFoundException.class, EmptyResultDataAccessException.class})
-    public ResponseEntity<String> handleNotFoundExceptions(RuntimeException ex) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    public ResponseEntity<Void> handleNotFoundExceptions(RuntimeException ex) {
+        return ResponseEntity.notFound().build();
     }
 
     @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
