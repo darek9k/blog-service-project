@@ -1,11 +1,10 @@
 package darek9k.comment;
 
 import darek9k.post.CreatePostRequest;
+import darek9k.post.ReadPostResponse;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -19,5 +18,11 @@ public class CommentController {
     @PostMapping
     public void create(@Valid @RequestBody CreateCommentRequest createCommentRequest) {
         commentService.create(createCommentRequest);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Comment> read(@PathVariable("id") Long id) {
+        Comment comment = commentService.findById(id);
+        return ResponseEntity.ok(comment);
     }
 }
