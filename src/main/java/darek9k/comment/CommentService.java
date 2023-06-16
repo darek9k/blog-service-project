@@ -30,10 +30,10 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public Comment findById(Long id) {
+    public ReadCommentResponse findById(Long id) {
         Optional<Comment> maybeComment = commentRepository.findById(id);
-
-        Comment comment = maybeComment.orElseThrow(EntityNotFoundException::new);
+        Optional<ReadCommentResponse> readCommentResponse = maybeComment.map(ReadCommentResponse::from);
+        ReadCommentResponse comment = readCommentResponse.orElseThrow(EntityNotFoundException::new);
         return comment;
     }
 }

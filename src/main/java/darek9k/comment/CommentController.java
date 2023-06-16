@@ -21,8 +21,8 @@ public class CommentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Comment> read(@PathVariable("id") Long id) {
-        Comment comment = commentService.findById(id);
+    public ResponseEntity<ReadCommentResponse> read(@PathVariable("id") Long id) {
+        ReadCommentResponse comment = commentService.findById(id);
         return ResponseEntity.ok(comment);
     }
 }
