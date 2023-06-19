@@ -31,9 +31,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    @Transactional(readOnly = true)
+    //@Transactional(readOnly = true)
     public ReadCommentResponse findById(Long id) {
-        Optional<Comment> maybeComment = commentRepository.findById(id);
+        Optional<Comment> maybeComment = commentRepository.findByIdFetchPost(id);
         Optional<ReadCommentResponse> readCommentResponse = maybeComment.map(ReadCommentResponse::from);
         ReadCommentResponse comment = readCommentResponse.orElseThrow(EntityNotFoundException::new);
         return comment;
