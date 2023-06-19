@@ -4,6 +4,7 @@ import darek9k.post.Post;
 import darek9k.post.PostService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -30,6 +31,7 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
+    @Transactional(readOnly = true)
     public ReadCommentResponse findById(Long id) {
         Optional<Comment> maybeComment = commentRepository.findById(id);
         Optional<ReadCommentResponse> readCommentResponse = maybeComment.map(ReadCommentResponse::from);
