@@ -48,8 +48,9 @@ public class Post {
     @Enumerated(EnumType.STRING)
     private PostStatus status;
 
-   /* @OneToMany(mappedBy = "post")
-    private Set<Comment> comments;*/
+    @OneToMany(mappedBy = "post")
+    private Set<Comment> comments;
+
     public Post() {
     }
 
@@ -145,13 +146,13 @@ public class Post {
         this.status = status;
     }
 
-    /*public Set<Comment> getComments() {
+    public Set<Comment> getComments() {
         return comments;
     }
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
-    }*/
+    }
 
     @Override
     public String toString() {
