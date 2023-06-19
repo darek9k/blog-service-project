@@ -36,7 +36,7 @@ public class Comment {
     @Size(max = 100)
     private String author;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Post post;
 
     public Comment() {

@@ -50,6 +50,7 @@ public class Post {
 
     @OneToMany(mappedBy = "post")
     private Set<Comment> comments;
+
     public Post() {
     }
 
@@ -143,6 +144,14 @@ public class Post {
 
     public void setStatus(PostStatus status) {
         this.status = status;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
