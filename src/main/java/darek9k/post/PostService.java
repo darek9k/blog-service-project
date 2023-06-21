@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,7 +24,7 @@ public class PostService {
     public PostService(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
-
+    @Transactional
     public void create(CreatePostRequest postRequest){
         Post post = new Post(
                 postRequest.getText(),
@@ -44,7 +45,7 @@ public class PostService {
         return postRepository.findById(id)//gives optional Post
                 .orElseThrow(() -> new EntityNotFoundException("Post not found"));//either give ReadPostResponse or throw an exception.
     }
-
+    @Transactional
     public void update(Long id, UpdatePostRequest updatePostRequest) {
         Post post = postRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
@@ -57,11 +58,11 @@ public class PostService {
 
         postRepository.save(newPost);
     }
-
+    @Transactional
     public void delete(Long id) {
         postRepository.deleteById(id);
     }
-
+    @Transactional
     public void archive(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);

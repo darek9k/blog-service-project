@@ -48,6 +48,15 @@ public class Comment {
         this.post = post;
     }
 
+    public Comment(Comment comment){
+        this.id = comment.id;
+        this.createdDateTime = comment.createdDateTime;
+        this.lastModifiedDate = comment.lastModifiedDate;
+        this.text = comment.text;
+        this.author = comment.author;
+        this.post = comment.post;
+
+    }
 
     public Long getId() {
         return id;
