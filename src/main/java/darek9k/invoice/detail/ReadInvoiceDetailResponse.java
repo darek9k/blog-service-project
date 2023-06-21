@@ -1,5 +1,7 @@
 package darek9k.invoice.detail;
 
+import darek9k.invoice.ReadInvoiceResponse;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -16,15 +18,15 @@ public class ReadInvoiceDetailResponse {
 
     private final BigDecimal price;
 
-    private final Long invoiceId;
+    private final ReadInvoiceResponse invoice;
 
-    public ReadInvoiceDetailResponse(Long id, Integer version, LocalDateTime createdDateTime, String productName, BigDecimal price, Long invoiceId) {
+    public ReadInvoiceDetailResponse(Long id, Integer version, LocalDateTime createdDateTime, String productName, BigDecimal price, ReadInvoiceResponse invoice) {
         this.id = id;
         this.version = version;
         this.createdDateTime = createdDateTime;
         this.productName = productName;
         this.price = price;
-        this.invoiceId = invoiceId;
+        this.invoice = invoice;
     }
 
     public Long getId() {
@@ -47,8 +49,8 @@ public class ReadInvoiceDetailResponse {
         return price;
     }
 
-    public Long getInvoiceId() {
-        return invoiceId;
+    public ReadInvoiceResponse getInvoice() {
+        return invoice;
     }
 
     public static ReadInvoiceDetailResponse from(InvoiceDetail invoiceDetail){
@@ -58,7 +60,7 @@ public class ReadInvoiceDetailResponse {
                 invoiceDetail.getCreatedDateTime(),
                 invoiceDetail.getProductName(),
                 invoiceDetail.getPrice(),
-                invoiceDetail.getInvoice().getId()
+                ReadInvoiceResponse.from(invoiceDetail.getInvoice())
         );
     }
 }
