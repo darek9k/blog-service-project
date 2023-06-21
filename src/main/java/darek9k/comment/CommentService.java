@@ -38,4 +38,17 @@ public class CommentService {
         ReadCommentResponse comment = readCommentResponse.orElseThrow(EntityNotFoundException::new);
         return comment;
     }
+
+    @Transactional
+    public void update(Long id, UpdateCommentRequest updateCommentRequest) {
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+
+        //Comment newComment = new Comment(comment);
+
+        comment.setAuthor(updateCommentRequest.getAuthor());
+        comment.setText(updateCommentRequest.getText());
+
+        //commentRepository.save(comment);
+    }
 }
