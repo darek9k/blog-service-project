@@ -1,6 +1,5 @@
 package darek9k.invoice.detail;
 
-import darek9k.comment.Comment;
 import darek9k.invoice.Invoice;
 import darek9k.invoice.InvoiceService;
 import jakarta.persistence.EntityNotFoundException;
