@@ -3,31 +3,36 @@ package darek9k.comment;
 import darek9k.post.Post;
 import darek9k.post.PostService;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
 
     private final PostService postService;
 
-    public CommentService(CommentRepository commentRepository, PostService postService) {
-        this.commentRepository = commentRepository;
-        this.postService = postService;
-    }
-    @Transactional
+   @Transactional
     public void create(CreateCommentRequest createCommentRequest){
         Post post = postService.findPostById(createCommentRequest.getPostId());
 
-        Comment comment = new Comment(
+       Comment comment = Comment.builder()
+                .text(createCommentRequest.getText())
+                .author(createCommentRequest.getAuthor())
+                .post(post)
+                .build();
+
+
+        /*Comment comment = new Comment(
                 createCommentRequest.getText(),
                 createCommentRequest.getAuthor(),
                 post
-        );
+        );*/
         commentRepository.save(comment);
     }
 
@@ -44,9 +49,10 @@ public class CommentService {
         Comment comment = commentRepository.findById(id)
                 .orElseThrow(EntityNotFoundException::new);
 
-        Comment newComment = new Comment(comment);
-        newComment.setAuthor(updateCommentRequest.getAuthor());
-        newComment.setText(updateCommentRequest.getText());
+        Comment newComment = comment.toBuilder()
+                .author(updateCommentRequest.getAuthor())
+                .text(updateCommentRequest.getText())
+                .build();
 
         commentRepository.save(newComment);
     }
