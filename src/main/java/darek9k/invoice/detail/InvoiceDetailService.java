@@ -4,6 +4,7 @@ import darek9k.invoice.Invoice;
 import darek9k.invoice.InvoiceService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class InvoiceDetailService {
     private final InvoiceDetailRepository invoiceDetailRepository;
     private final InvoiceService invoiceService;
@@ -23,7 +25,10 @@ public class InvoiceDetailService {
                 .price(invoiceDetailRequest.getPrice())
                 .productName(invoiceDetailRequest.getProductName())
                 .build();
-        invoiceDetailRepository.save(invoiceDetail);
+        log.debug("invoiceDetail: {}",invoiceDetail);
+        //invoiceDetailRepository.save(invoiceDetail);
+
+        log.info("wynik save: {}",invoiceDetailRepository.save(invoiceDetail));
     }
 
     public ReadInvoiceDetailResponse findById(Long id) {
