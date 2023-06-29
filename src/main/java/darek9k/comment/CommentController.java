@@ -6,8 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/api/comments")
 @RequiredArgsConstructor
@@ -22,13 +20,8 @@ public class CommentController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ReadCommentResponse> read(@PathVariable("id") Long id) {
-        log.info("metoda read, paramtry: {}", id);
-        long start = System.currentTimeMillis();
         ReadCommentResponse comment = commentService.findById(id);
-        ResponseEntity<ReadCommentResponse> ok = ResponseEntity.ok(comment);
-        long end = System.currentTimeMillis();
-        log.info("koniec metody read, trwala: {} ms", (end-start));
-        return ok;
+        return ResponseEntity.ok(comment);
     }
 
 
