@@ -6,25 +6,36 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.MDC;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.UUID;
 
 @Slf4j
 public class TrackingFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        log.info(prepareRequestLog(request));
-        long start = System.currentTimeMillis();
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        try {
+            MultiReadHttpServletRequest request = new MultiReadHttpServletRequest(req);
+            MDC.put("requestId", UUID.randomUUID().toString());
 
-        filterChain.doFilter(request, response);
+            log.info(prepareRequestLog(request));
+            log.info(new String(request.getInputStream().readAllBytes()));
 
-        long end = System.currentTimeMillis();
-        log.info("Stop request {} {},status {}, took {} ms",
-                request.getMethod(),
-                request.getRequestURI(),
-                response.getStatus(),
-                (end - start));
+            long start = System.currentTimeMillis();
+
+            filterChain.doFilter(request, response);
+
+            long end = System.currentTimeMillis();
+            log.info("Stop request {} {},status {}, took {} ms",
+                    request.getMethod(),
+                    request.getRequestURI(),
+                    response.getStatus(),
+                    (end - start));
+        } finally {
+            MDC.clear();
+        }
     }
 
     @NotNull
