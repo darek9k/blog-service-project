@@ -2,9 +2,13 @@ package darek9k.comment;
 
 import darek9k.post.Post;
 import darek9k.post.PostService;
+import darek9k.util.SpecificationUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,4 +65,19 @@ public class CommentService {
 
         commentRepository.save(newComment);
     }
+
+    public Page<ReadCommentResponse> find(Long postId, Pageable pageable) {
+        return commentRepository.findAll(prepareSpecification(postId), pageable)
+                .map(ReadCommentResponse::from);
+    }
+
+    private Specification<Comment> prepareSpecification(Long postId) {
+        return (root, query, criteriaBuilder) -> {
+            if (!SpecificationUtil.isCountQuery(query)) {
+                root.fetch("post");
+            }
+            return criteriaBuilder.equal(root.get("post").get("id"), postId);
+        };
+    }
 }
+
