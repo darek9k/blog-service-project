@@ -2,9 +2,13 @@ package darek9k.invoice.detail;
 
 import darek9k.invoice.Invoice;
 import darek9k.invoice.InvoiceService;
+import darek9k.util.SpecificationUtil;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,5 +61,19 @@ public class InvoiceDetailService {
                 updateInvoiceDetailRequest.getPrice(),
                 invoiceDetail.getInvoice());*/
         invoiceDetailRepository.save(newInvoiceDetail);
+    }
+
+    public Page<ReadInvoiceDetailResponse> find(Long invoiceId, Pageable pageable) {
+        return invoiceDetailRepository.findAll(prepareSpec(invoiceId), pageable)
+                .map(ReadInvoiceDetailResponse::from);
+    }
+
+    private Specification<InvoiceDetail> prepareSpec(Long invoiceId) {
+        return (root, query, criteriaBuilder) -> {
+            if (!SpecificationUtil.isCountQuery(query)) {
+                root.fetch("invoice");
+            }
+            return criteriaBuilder.equal(root.get("invoice").get("id"), invoiceId);
+        };
     }
 }
