@@ -67,6 +67,13 @@ public class InvoiceService {
         newInvoice.setSeller(updateInvoiceRequest.seller());
         newInvoice.setVersion(updateInvoiceRequest.version());
 
+        Set<InvoiceDetail> invoiceDetails = newInvoice.getInvoiceDetails();
+        InvoiceDetail invoiceDetail = invoiceDetails.iterator().next();
+        invoiceDetail.setPrice(new BigDecimal("-1"));
+        /// ... update code
+
+        invoiceDetails.add(InvoiceDetail.builder().productName("productNew").price(BigDecimal.TEN).invoice(newInvoice).build());
+
         invoiceRepository.save(newInvoice);
     }
     @Transactional
