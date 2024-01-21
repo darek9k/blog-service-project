@@ -45,7 +45,7 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
     private Set<InvoiceDetail> invoiceDetails;
 
     public Invoice() {
@@ -61,6 +61,7 @@ public class Invoice {
         this.buyer = old.buyer;
         this.seller = old.seller;
         this.status = old.status;
+        this.invoiceDetails = old.invoiceDetails;
     }
 
     public Invoice(LocalDate paymentDate, String buyer, String seller) {
