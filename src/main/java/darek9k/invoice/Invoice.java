@@ -45,7 +45,7 @@ public class Invoice {
     @Enumerated(EnumType.STRING)
     private InvoiceStatus status;
 
-    @OneToMany(mappedBy = "invoice")
+    @OneToMany(mappedBy = "invoice", cascade = {CascadeType.PERSIST})
     private Set<InvoiceDetail> invoiceDetails;
 
     public Invoice() {

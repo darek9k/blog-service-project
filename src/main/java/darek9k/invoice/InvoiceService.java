@@ -1,5 +1,6 @@
 package darek9k.invoice;
 
+import darek9k.invoice.detail.InvoiceDetail;
 import darek9k.util.LogUtil;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -14,8 +15,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +37,12 @@ public class InvoiceService {
                 createInvoiceRequest.buyer(),
                 createInvoiceRequest.seller()
         );
+
+        Set<InvoiceDetail> invoiceDetails = new HashSet<>();
+        invoiceDetails.add(InvoiceDetail.builder().productName("product1").price(BigDecimal.ONE).invoice(invoice).build());
+        invoiceDetails.add(InvoiceDetail.builder().productName("product2").price(new BigDecimal(23.67)).invoice(invoice).build());
+        invoice.setInvoiceDetails(invoiceDetails);
+
         invoiceRepository.save(invoice);
     }
     public ReadInvoiceResponse findById(Long id){
