@@ -1,66 +1,32 @@
 package darek9k.post;
 
+import darek9k.comment.Comment;
+import lombok.Value;
+
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Value
 
 public class ReadPostResponse {
 
-    private final Long id;
-    private final Integer version;
+    Long id;
+    Integer version;
 
-    private final String text;
+    String text;
 
-    private final LocalDateTime createdDateTime;
+    LocalDateTime createdDateTime;
 
-    private final PostScope scope;
+    PostScope scope;
 
-    private final String author;
+    String author;
 
-    private final LocalDateTime publicationDate;
-    private final PostStatus status;
+    LocalDateTime publicationDate;
+    PostStatus status;
 
-
-    public ReadPostResponse(Long id, Integer version, String text, LocalDateTime createdDateTime, PostScope scope, String author, LocalDateTime publicationDate, PostStatus status) {
-        this.id = id;
-        this.version = version;
-        this.text = text;
-        this.createdDateTime = createdDateTime;
-        this.scope = scope;
-        this.author = author;
-        this.publicationDate = publicationDate;
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public LocalDateTime getCreatedDateTime() {
-        return createdDateTime;
-    }
-
-    public PostScope getScope() {
-        return scope;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public LocalDateTime getPublicationDate() {
-        return publicationDate;
-    }
-
-    public PostStatus getStatus() {
-        return status;
-    }
+    List<CommentResponse> comments;
 
     public static ReadPostResponse from(Post post){
         return new ReadPostResponse(
@@ -71,7 +37,33 @@ public class ReadPostResponse {
                 post.getScope(),
                 post.getAuthor(),
                 post.getPublicationDate(),
-                post.getStatus()
+                post.getStatus(),
+                post.getComments().stream()
+                        .map(CommentResponse::from)
+                        .sorted(Comparator.comparing(CommentResponse::getCreatedDateTime).reversed())
+                        .collect(Collectors.toList())
         );
+    }
+
+    @Value
+    public static class CommentResponse {
+
+        Long id;
+
+        String text;
+
+        LocalDateTime createdDateTime;
+
+        String author;
+
+
+        public static CommentResponse from(Comment comment) {
+            return new CommentResponse(
+                    comment.getId(),
+                    comment.getText(),
+                    comment.getCreatedDateTime(),
+                    comment.getAuthor()
+            );
+        }
     }
 }
