@@ -26,6 +26,9 @@ public interface PostRepository extends CrudRepository<Post, Long>, JpaSpecifica
     @Query("select p from Post p")
     List<Post> find();
 
+    @Query("select p from Post p left join fetch p.comments where p.id=:id")
+    Optional<Post> findByIdFetchComments(Long id);
+
     @Query("select p from Post p where p.status='DELETED'")
     List<Post> findDeleted();
 
